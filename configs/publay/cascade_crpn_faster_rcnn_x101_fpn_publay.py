@@ -344,5 +344,5 @@ load_from = '/netscratch/minouei/report/work_dirs/cascade_crpn_faster_rcnn_x101_
 resume_from = None
 workflow = [('train', 1)]
 rpn_weight = 0.7
-work_dir = '/netscratch/minouei/report/work_dirs/cascade_crpn_faster_rcnn_x101_freeze_fpn_publay'
+work_dir = '/netscratch/minouei/report/work_dirs/cascade_crpn_faster_rcnn_x101_fpn_publay'
 gpu_ids = range(0, 1)
