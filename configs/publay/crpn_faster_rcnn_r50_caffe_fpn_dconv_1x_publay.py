@@ -9,7 +9,7 @@ model = dict(
         norm_cfg=dict(type='BN', requires_grad=False),
         norm_eval=True,
         style='caffe',
-        dcn=dict(type='DCN', deform_groups=1, fallback_on_stride=False),
+        dcn=dict(type='DCNv2', deform_groups=2, fallback_on_stride=False),
         stage_with_dcn=(False, True, True, True)),
     neck=dict(
         type='FPN',

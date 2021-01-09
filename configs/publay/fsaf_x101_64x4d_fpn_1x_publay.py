@@ -189,5 +189,5 @@ log_level = 'INFO'
 load_from = '/netscratch/minouei/report/work_dirs/fsaf_x101_64x4d_freeze_fpn_1x_publay/epoch_1.pth'
 resume_from = None
 workflow = [('train', 1)]
-work_dir = '/netscratch/minouei/report/work_dirs/fsaf_x101_64x4d_freeze_fpn_1x_publay'
+work_dir = '/netscratch/minouei/report/work_dirs/fsaf_x101_64x4d_fpn_1x_publay'
 gpu_ids = range(0, 1)
