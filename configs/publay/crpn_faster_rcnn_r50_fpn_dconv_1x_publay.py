@@ -8,7 +8,7 @@ model = dict(
         frozen_stages=0,
         norm_cfg=dict(type='BN', requires_grad=False),
         norm_eval=True,
-        style='caffe',
+        style='pytorch',
         dcn=dict(type='DCNv2', deform_groups=2, fallback_on_stride=False),
         stage_with_dcn=(False, True, True, True)),
     neck=dict(
@@ -140,7 +140,7 @@ test_cfg = dict(
         max_per_img=100))
 dataset_type = 'CocoDataset'
 img_norm_cfg = dict(
-    mean=[103.53, 116.28, 123.675], std=[1.0, 1.0, 1.0], to_rgb=False)
+    mean=[30.3344, 30.4473, 30.3461], std=[56.7147, 56.9299, 56.8265], to_rgb=True)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
@@ -149,9 +149,9 @@ train_pipeline = [
     dict(type='RandomFlip', flip_ratio=0.0),
     dict(
         type='Normalize',
-        mean=[103.53, 116.28, 123.675],
-        std=[1.0, 1.0, 1.0],
-        to_rgb=False),
+        mean=[30.3344, 30.4473, 30.3461],
+        std=[56.7147, 56.9299, 56.8265],
+        to_rgb=True),
     dict(type='Pad', size_divisor=32),
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
@@ -168,9 +168,9 @@ test_pipeline = [
             dict(type='RandomFlip'),
             dict(
                 type='Normalize',
-                mean=[103.53, 116.28, 123.675],
-                std=[1.0, 1.0, 1.0],
-                to_rgb=False),
+                mean=[30.3344, 30.4473, 30.3461],
+                std=[56.7147, 56.9299, 56.8265],
+                to_rgb=True),
             dict(type='Pad', size_divisor=32),
             dict(type='ImageToTensor', keys=['img']),
             dict(type='Collect', keys=['img'])
@@ -220,5 +220,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 rpn_weight = 0.7
-work_dir = '/netscratch/minouei/report/work_dirs/crpn_faster_rcnn_r50_caffe_fpn_1x_coco'
+work_dir = '/netscratch/minouei/report/work_dirs/crpn_faster_rcnn_r50_fpn_1x_coco'
 gpu_ids = range(0, 1)
