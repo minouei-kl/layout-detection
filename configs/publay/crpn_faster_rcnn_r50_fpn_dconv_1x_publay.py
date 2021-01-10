@@ -198,14 +198,14 @@ data = dict(
         img_prefix='/ds/documents/PubLayNet/publaynet/val/',
         pipeline=test_pipeline))
 evaluation = dict(interval=1, metric='bbox')
-optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.002, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 lr_config = dict(
-    policy='step',
-    warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=0.001,
-    step=[8, 11])
+    policy='cyclic',
+    target_ratio=(10, 1),
+    cyclic_times=12,
+    step_ratio_up=0.5,
+)
 total_epochs = 12
 checkpoint_config = dict(interval=1)
 log_config = dict(
@@ -220,5 +220,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 rpn_weight = 0.7
-work_dir = '/netscratch/minouei/report/work_dirs/crpn_faster_rcnn_r50_fpn_1x_coco'
+work_dir = '/netscratch/minouei/report/work_dirs/crpn_faster_rcnn_r50_fpn_cycle_publay'
 gpu_ids = range(0, 1)
