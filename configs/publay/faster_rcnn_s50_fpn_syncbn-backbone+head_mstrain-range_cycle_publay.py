@@ -161,6 +161,7 @@ train_pipeline = [
         img_scale=[(704, 704)],
         multiscale_mode='range',
         keep_ratio=True),
+    dict(type='MyTransform'),
     dict(type='RandomFlip', flip_ratio=0.0),
     dict(
         type='Normalize',
