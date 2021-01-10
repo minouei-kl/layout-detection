@@ -1,7 +1,7 @@
 norm_cfg = dict(type='BN', requires_grad=False)
 model = dict(
     type='TridentFasterRCNN',
-    pretrained='open-mmlab://detectron2/resnet50_caffe',
+    # pretrained='open-mmlab://detectron2/resnet50_caffe',
     backbone=dict(
         type='TridentResNet',
         depth=50,
