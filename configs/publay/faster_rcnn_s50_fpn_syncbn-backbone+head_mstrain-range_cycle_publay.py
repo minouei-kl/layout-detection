@@ -220,8 +220,8 @@ lr_config = dict(
     policy='cyclic',
     target_ratio=(20, 0.1),
     cyclic_times=12,
-    step_ratio_up=0.5,
-    gamma=0.7
+    step_ratio_up=0.4,
+    gamma=0.5
 )
 total_epochs = 12
 checkpoint_config = dict(interval=1)
