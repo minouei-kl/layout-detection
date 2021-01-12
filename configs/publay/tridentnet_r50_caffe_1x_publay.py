@@ -234,9 +234,9 @@ optimizer = dict(type='SGD', lr=0.002, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='cyclic',
-    target_ratio=(20, 1),
+    target_ratio=(20, 0.1),
     cyclic_times=12,
-    step_ratio_up=0.5,
+    step_ratio_up=0.4,
 )
 total_epochs = 12
 checkpoint_config = dict(interval=1)
