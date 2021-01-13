@@ -211,7 +211,7 @@ lr_config = dict(
     target_ratio=(40, 0.1),
     cyclic_times=12,
     step_ratio_up=0.4,
-    gamma=0.5
+    gamma=0.7
 )
 total_epochs = 12
 checkpoint_config = dict(interval=1)
