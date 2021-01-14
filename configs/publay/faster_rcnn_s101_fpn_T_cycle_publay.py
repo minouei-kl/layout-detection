@@ -3,16 +3,15 @@ model = dict(
     # pretrained='torchvision://resnet50',
     backbone=dict(
         type='ResNeSt',
-        depth=50,
+        depth=101,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         frozen_stages=0,
         norm_cfg=dict(type='SyncBN', requires_grad=True),
         norm_eval=False,
         style='pytorch',
-        stem_channels=64,
+        stem_channels=128,
         radix=2,
-        groups=2,
         reduction_factor=4,
         avg_down_stride=True),
     neck=dict(
@@ -147,8 +146,8 @@ test_cfg = dict(
 dataset_type = 'CocoDataset'
 data_root = 'data/coco/'
 img_norm_cfg = dict(
-    mean=[237.4813, 237.3834, 237.4615],
-    std=[39.8888, 40.0881, 40.0570],
+    mean=[30.3344, 30.4473, 30.3461],
+    std=[56.7147, 56.9299, 56.8265],
     to_rgb=True)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
@@ -162,6 +161,7 @@ train_pipeline = [
         img_scale=[(704, 704)],
         multiscale_mode='range',
         keep_ratio=True),
+    dict(type='MyTransform'),
     dict(type='RandomFlip', flip_ratio=0.0),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
@@ -176,6 +176,7 @@ test_pipeline = [
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),
+            dict(type='MyTransform'),
             dict(type='RandomFlip'),
             dict(type='Normalize', **img_norm_cfg),
             dict(type='Pad', size_divisor=32),
@@ -228,5 +229,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
-work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_group2_wT_cycle_g7_publay'
+work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_T_cycle_g7s4_publay'
 gpu_ids = range(0, 1)
