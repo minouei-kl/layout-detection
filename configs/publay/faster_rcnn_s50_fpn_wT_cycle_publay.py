@@ -184,8 +184,8 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=8,
-    workers_per_gpu=16,
+    samples_per_gpu=4,
+    workers_per_gpu=8,
     train=dict(
         type='CocoDataset',
         classes=('text', 'title', 'list', 'table', 'figure'),
