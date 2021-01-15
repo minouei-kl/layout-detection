@@ -12,7 +12,6 @@ model = dict(
         style='pytorch',
         stem_channels=64,
         radix=2,
-        groups=2,
         reduction_factor=4,
         avg_down_stride=True),
     neck=dict(
@@ -212,7 +211,7 @@ lr_config = dict(
     target_ratio=(40, 0.1),
     cyclic_times=12,
     step_ratio_up=0.4,
-    gamma=0.7
+    gamma=0.8
 )
 total_epochs = 12
 checkpoint_config = dict(interval=1)
@@ -228,5 +227,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
-work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_group2_wT_cycle_g7_publay'
+work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_cycle_g8_publay'
 gpu_ids = range(0, 1)
