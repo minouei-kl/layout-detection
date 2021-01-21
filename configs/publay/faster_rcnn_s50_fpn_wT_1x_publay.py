@@ -211,7 +211,7 @@ lr_config = dict(
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.001,
-    step=[8, 11])
+    step=[6, 9])
 total_epochs = 12
 checkpoint_config = dict(interval=1)
 log_config = dict(
@@ -226,5 +226,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
-work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_publay'
+work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_69_publay'
 gpu_ids = range(0, 1)
