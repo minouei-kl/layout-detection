@@ -224,7 +224,7 @@ log_config = dict(
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = None
-resume_from = None
+resume_from = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_246_publay/epoch_8.pth'
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_246_publay'
