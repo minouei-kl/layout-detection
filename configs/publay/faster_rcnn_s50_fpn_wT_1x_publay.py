@@ -212,7 +212,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.001,
     gamma=0.5,
-    step=[2, 6, 10])
+    step=[2, 6,8, 10])
 total_epochs = 12
 checkpoint_config = dict(interval=1)
 log_config = dict(
