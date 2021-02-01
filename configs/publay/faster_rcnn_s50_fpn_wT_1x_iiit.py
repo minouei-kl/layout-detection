@@ -1,6 +1,6 @@
 model = dict(
     type='FasterRCNN',
-    # pretrained='torchvision://resnet50',
+    pretrained='/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_69_publay/epoch_12.pth',
     backbone=dict(
         type='ResNeSt',
         depth=50,
@@ -183,7 +183,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=4,
+    samples_per_gpu=2,
     workers_per_gpu=8,
     train=dict(
         type='CocoDataset',
@@ -226,5 +226,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
-work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_69_iiit'
+work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_loaded_1x_69_iiit'
 gpu_ids = range(0, 1)
