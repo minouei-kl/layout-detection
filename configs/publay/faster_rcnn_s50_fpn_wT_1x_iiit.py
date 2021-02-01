@@ -1,6 +1,6 @@
 model = dict(
     type='FasterRCNN',
-    pretrained='/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_69_publay/epoch_12.pth',
+    pretrained='/netscratch/minouei/report/pre-trained.pth',
     backbone=dict(
         type='ResNeSt',
         depth=50,
