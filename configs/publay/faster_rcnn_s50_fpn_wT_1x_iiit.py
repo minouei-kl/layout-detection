@@ -6,7 +6,7 @@ model = dict(
         depth=50,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
-        frozen_stages=0,
+        frozen_stages=1,
         norm_cfg=dict(type='SyncBN', requires_grad=True),
         norm_eval=False,
         style='pytorch',
@@ -184,7 +184,7 @@ test_pipeline = [
 ]
 classes = ('table', 'figure', 'natural_image','logo','signature')
 data = dict(
-    samples_per_gpu=2,
+    samples_per_gpu=1,
     workers_per_gpu=8,
     train=dict(
         type='CocoDataset',
@@ -205,15 +205,15 @@ data = dict(
         img_prefix='/netscratch/minouei/report/iiit/test_images/',
         pipeline=test_pipeline))
 evaluation = dict(interval=1, metric='bbox')
-optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 lr_config = dict(
     policy='step',
     warmup='linear',
     warmup_iters=500,
     warmup_ratio=0.001,
-    step=[6, 9])
-total_epochs = 12
+    step=[16, 22])
+total_epochs = 24
 checkpoint_config = dict(interval=1)
 log_config = dict(
     interval=50,
