@@ -79,12 +79,8 @@ model = dict(
                 target_stds=[0.1, 0.1, 0.2, 0.2]),
             reg_class_agnostic=False,
             loss_cls=dict(
-                type='FocalLoss',
-                use_sigmoid=True,
-                gamma=2.0,
-                alpha=0.25,
-                loss_weight=1.0),
-            loss_bbox=dict(type='GIoULoss', loss_weight=2.0),
+                type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
+            loss_bbox=dict(type='L1Loss', loss_weight=1.0),
             conv_out_channels=256,
             norm_cfg=dict(type='SyncBN', requires_grad=True))))
 train_cfg = dict(
@@ -186,24 +182,25 @@ test_pipeline = [
             dict(type='Collect', keys=['img'])
         ])
 ]
+classes = ('table', 'figure', 'natural_image','logo','signature')
 data = dict(
     samples_per_gpu=2,
     workers_per_gpu=8,
     train=dict(
         type='CocoDataset',
-        classes=('text', 'title', 'list', 'table', 'figure'),
+        classes=classes,
         ann_file='/netscratch/minouei/report/iiit/instances_train2014.json',
         img_prefix='/netscratch/minouei/report/iiit/training_images/',
         pipeline=train_pipeline),
     val=dict(
         type='CocoDataset',
-        classes=('text', 'title', 'list', 'table', 'figure'),
+        classes=classes,
         ann_file='/netscratch/minouei/report/iiit/instances_val2014.json',
         img_prefix='/netscratch/minouei/report/iiit/validation_images/',
         pipeline=test_pipeline),
     test=dict(
         type='CocoDataset',
-        classes=('text', 'title', 'list', 'table', 'figure'),
+        classes=classes,
         ann_file='/netscratch/minouei/report/iiit/instances_test2014.json',
         img_prefix='/netscratch/minouei/report/iiit/test_images/',
         pipeline=test_pipeline))
@@ -230,5 +227,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
-work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_loaded_fl_1x_69_iiit'
+work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_loaded_1x_69_iiit'
 gpu_ids = range(0, 1)
