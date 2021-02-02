@@ -56,8 +56,11 @@ model = dict(
                     target_means=(0.0, 0.0, 0.0, 0.0),
                     target_stds=(0.05, 0.05, 0.1, 0.1)),
                 loss_cls=dict(
-                    type='CrossEntropyLoss', use_sigmoid=True,
-                    loss_weight=0.7),
+                    type='FocalLoss',
+                    use_sigmoid=True,
+                    gamma=2.0,
+                    alpha=0.25,
+                    loss_weight=1.0),
                 loss_bbox=dict(type='IoULoss', linear=True, loss_weight=7.0))
         ]),
     roi_head=dict(
@@ -204,7 +207,7 @@ data = dict(
         img_prefix='/netscratch/minouei/report/iiit/test_images/',
         pipeline=test_pipeline))
 evaluation = dict(interval=1, metric='bbox')
-optimizer = dict(type='SGD', lr=0.02, momentum=0.9, weight_decay=0.0001)
+optimizer = dict(type='SGD', lr=0.01, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
 lr_config = dict(
     policy='step',
