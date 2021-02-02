@@ -229,5 +229,5 @@ load_from = None
 resume_from = None
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
-work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_loaded_1x_69_iiit'
+work_dir = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_loaded_fl_1x_69_iiit'
 gpu_ids = range(0, 1)
