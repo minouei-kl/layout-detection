@@ -1,6 +1,6 @@
 model = dict(
     type='FasterRCNN',
-    pretrained='/netscratch/minouei/report/pre-trained.pth',
+    # pretrained='/netscratch/minouei/report/pre-trained.pth',
     backbone=dict(
         type='ResNeSt',
         depth=50,
@@ -223,7 +223,7 @@ log_config = dict(
     ])
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-load_from = None
+load_from = '/netscratch/minouei/report/work_dirs/faster_rcnn_s50_fpn_wT_1x_69_publay/epoch_12.pth'
 resume_from = None
 workflow = [('train', 1)]
 norm_cfg = dict(type='SyncBN', requires_grad=True)
