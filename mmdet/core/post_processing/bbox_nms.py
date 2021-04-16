@@ -66,6 +66,7 @@ def multiclass_nms(multi_bboxes,
     # TODO: add size check before feed into batched_nms
     dets, keep = batched_nms(bboxes, scores, labels, nms_cfg)
 
+    # bboxes=bboxes[keep]
     if max_num > 0:
         dets = dets[:max_num]
         keep = keep[:max_num]

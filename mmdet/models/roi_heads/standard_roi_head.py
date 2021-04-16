@@ -4,6 +4,7 @@ from mmdet.core import bbox2result, bbox2roi, build_assigner, build_sampler
 from ..builder import HEADS, build_head, build_roi_extractor
 from .base_roi_head import BaseRoIHead
 from .test_mixins import BBoxTestMixin, MaskTestMixin
+import numpy as np
 
 
 @HEADS.register_module()
@@ -64,7 +65,7 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
         if self.with_mask:
             mask_rois = rois[:100]
             mask_results = self._mask_forward(x, mask_rois)
-            outs = outs + (mask_results['mask_pred'], )
+            outs = outs + (mask_results['mask_pred'],)
         return outs
 
     def forward_train(self,
@@ -235,6 +236,74 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
                 mask_test_cfg=self.test_cfg.get('mask'))
             return bbox_results, segm_results
 
+    def filter_box(self, all_bboxes, all_labels):
+        for idx in range(len(all_bboxes)):
+            det_bboxes = all_bboxes[idx].cpu().detach().numpy()
+            det_labels = all_labels[idx].cpu().detach().numpy()
+            adj = np.zeros((len(det_bboxes), len(det_bboxes)), int)
+            for i in range(len(det_bboxes)):
+                for j in range(i):
+                    boxA = det_bboxes[i]
+                    boxB = det_bboxes[j]
+                    xA = max(boxA[0], boxB[0])
+                    yA = max(boxA[1], boxB[1])
+                    xB = min(boxA[2], boxB[2])
+                    yB = min(boxA[3], boxB[3])
+                    # compute the area of intersection rectangle
+                    interArea = max(0, xB - xA) * max(0, yB - yA)
+                    boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
+                    boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
+                    ovp = max((interArea / boxAArea), (interArea / boxBArea))
+                    iou = interArea / float(boxAArea + boxBArea - interArea)
+                    if (iou > 0.1 or ovp > 0.5):
+                        adj[i][j] = adj[j][i] = 1
+
+            ConSubSets = []
+
+            for i in range(len(det_bboxes)):
+                bset = []
+                for j in range(len(det_bboxes)):
+                    if adj[i][j] == 0:
+                        toadd = True
+                        for pb in bset:
+                            pi = int(pb[-1])
+                            if adj[pi][j] == 1:
+                                toadd = False
+                                break
+                        if toadd:
+                            tmp = det_bboxes[j][:]
+                            tmp = np.append(tmp, j)
+                            bset.append(tmp)
+                ConSubSets.append(np.asarray(bset))
+
+            alla, alls, fscr = [], [], []
+
+            for sl in ConSubSets:
+                areas = sum([(box[2] - box[0]) * (box[3] - box[1]) for box in sl]) / 500000.0
+                alla.append(areas)
+                # print(areas)
+                bxnd = np.asarray(sl)
+                scores = bxnd[:, -2]
+                ms = np.mean(scores)
+                alls.append(ms)
+                fscr.append(np.mean(areas + ms))
+
+            ik = fscr.index(max(fscr))
+            keep = []
+            for box in ConSubSets[ik]:
+                keep.append(int(box[-1]))
+            kp=[]
+            for jb in range(len(all_bboxes[idx])):
+                if jb in keep:
+                    all_bboxes[idx][jb][-1] = (all_bboxes[idx][jb][-1] + 1) / 2
+                else:
+                    all_bboxes[idx][jb][-1] = all_bboxes[idx][jb][-1] / 2
+                if all_bboxes[idx][jb][-1] > 0.25:
+                    kp.append(jb)
+            # all_bboxes[idx] = all_bboxes[idx][kp]
+            # all_labels[idx] = all_labels[idx][kp]
+        return all_bboxes, all_labels
+
     def simple_test(self,
                     x,
                     proposal_list,
@@ -246,6 +315,9 @@ class StandardRoIHead(BaseRoIHead, BBoxTestMixin, MaskTestMixin):
 
         det_bboxes, det_labels = self.simple_test_bboxes(
             x, img_metas, proposal_list, self.test_cfg, rescale=rescale)
+
+        # det_bboxes, det_labels = self.filter_box(det_bboxes, det_labels)
+
         if torch.onnx.is_in_onnx_export():
             if self.with_mask:
                 segm_results = self.simple_test_mask(
